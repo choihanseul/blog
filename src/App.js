@@ -10,7 +10,7 @@ function App() {
   let [like, addLike] = useState( [0, 0, 0] );
   let [modal, setModal] = useState(false);
 
-  let setTitle = '';
+  let [seq, setSeq] = useState(0);
 
   return (
     // JSX 자바스크립트 안에서 html을 쓸 수 있게 해줌
@@ -46,7 +46,10 @@ function App() {
         title.map(function(a, i) {
           return (
             <div className="list" key={i}>
-            <h4 onClick={()=> { setModal(!modal) }}>{ a }</h4>
+            <h4 onClick={()=> {
+              setSeq(i) 
+              setModal(!modal)
+              }}>{ a }</h4>
             <span onClick={()=> {
               let add = [...like]
               add[i] = add[i] + 1
@@ -59,7 +62,7 @@ function App() {
       }
 
       {
-        modal === true ? <Modal title = { title } changTitle = { changTitle }/> : null
+        modal === true ? <Modal title = { title } seq = { seq }/> : null
       }
     </div>
   );
@@ -71,7 +74,7 @@ function App() {
 function Modal(props) {
   return (
     <div className="modal">
-      <h4>{ props.setTitle }</h4>
+      <h4>{ props.title[props.seq] }</h4>
       <p>날짜</p>
       <p>상세내용</p>
     </div>
