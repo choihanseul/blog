@@ -1,13 +1,12 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 // [동적인 UI 만드는 step]
 // 1. html css로 미리 디자인 완성
 // 2. UI의 현재 상태를 state로 저장
 // 3. state에 따라 UI가 어떻게 보일지 작성
 function App() {
   let [title, changTitle] = useState( [ '남자 코트 추천', '강남 우동 맛집', '파이썬 독학' ] ); // let [작명(변수), 작명(state 변경 도와주는 함수)] = useState(보관할 자료)
-  let [like, addLike] = useState( [0, 0, 0] );
   let [modal, setModal] = useState(false);
   let [seq, setSeq] = useState(0);
   let text = '';
@@ -139,21 +138,23 @@ function App() {
       <button onClick={()=> {
         if (text === '' || text === undefined || text === null) {
           alert('내용을 입력하세요')
-        } else {
-          let addTitle = [...arr]
-          let copy = {
-            title: text,
-            like: 0,
-            date: getDate(new Date())
-          }
-          addTitle.unshift(copy)
-          changArr(addTitle)
+          return
         }
+        let addTitle = [...arr]
+        let copy = {
+          title: text,
+          like: 0,
+          date: getDate(new Date())
+        }
+        addTitle.unshift(copy)
+        changArr(addTitle)
       }}>등록</button>
 
       {
         modal === true ? <Modal title = { title } seq = { seq }/> : null
       }
+
+      <Modal2></Modal2>
     </div>
   );
 }
@@ -169,6 +170,21 @@ function Modal(props) {
       <p>상세내용</p>
     </div>
   )
+}
+
+class Modal2 extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      name: 'kim',
+      age: 20
+    }
+  }
+  render() {
+    return (
+      <div></div>
+    )
+  }
 }
 
 
