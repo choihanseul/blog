@@ -9,8 +9,39 @@ function App() {
   let [title, changTitle] = useState( [ '남자 코트 추천', '강남 우동 맛집', '파이썬 독학' ] ); // let [작명(변수), 작명(state 변경 도와주는 함수)] = useState(보관할 자료)
   let [like, addLike] = useState( [0, 0, 0] );
   let [modal, setModal] = useState(false);
-
   let [seq, setSeq] = useState(0);
+  let text = '';
+
+  function getDate(date) {
+    var year = date.getFullYear();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+
+    var hours = ('0' + date.getHours()).slice(-2); 
+    var minutes = ('0' + date.getMinutes()).slice(-2);
+    var seconds = ('0' + date.getSeconds()).slice(-2); 
+    
+    return year + '-' + month  + '-' + day + ' ' + hours + ':' + minutes  + ':' + seconds
+  }
+  
+
+  let [arr, changArr] = useState([
+    {
+      title: '남자 코트 추천',
+      like: 0,
+      date: getDate(new Date())
+    },
+    {
+      title: '강남 우동 맛집',
+      like: 0,
+      date: getDate(new Date())
+    },
+    {
+      title: '파이썬 독학',
+      like: 0,
+      date: getDate(new Date())
+    }
+  ])
 
   return (
     // JSX 자바스크립트 안에서 html을 쓸 수 있게 해줌
@@ -24,6 +55,7 @@ function App() {
       <button onClick={()=> {
         let sort = [...title.sort()]
         changTitle(sort)
+        console.log(arr)
       }}>정렬</button>
       {/* 
         <h4>
@@ -42,24 +74,82 @@ function App() {
        */}
        </div>
 
-      {
+      {/* {
         title.map(function(a, i) {
           return (
             <div className="list" key={i}>
             <h4 onClick={()=> {
-              setSeq(i) 
+              setSeq(i)
               setModal(!modal)
-              }}>{ a }</h4>
-            <span onClick={()=> {
-              let add = [...like]
-              add[i] = add[i] + 1
-              addLike(add) }
-              }>👍 </span>{ like[i] }
+              }}>{ a }
+              <span onClick={(e)=> {
+                e.stopPropagation()
+                let add = [...like]
+                add[i] = add[i] + 1
+                addLike(add) }
+                }>👍 
+              </span>{ like[i] }
+            </h4>
             <p>2월 17일 발행</p>
+            <button onClick={(e)=>{
+                e.stopPropagation()
+                let delTitle = [...title]
+                delTitle.splice(i, 1)
+                changTitle(delTitle)
+              }}>
+                삭제</button>
           </div>
           )
         })
+      } */}
+
+      {
+        arr.map(function(a, i) {
+          return (
+            <div className="list" key={i}>
+              <h4 onClick={()=> {
+                setSeq(i)
+                setModal(!modal)
+                }}>{ a.title }
+                <span onClick={(e)=> {
+                  e.stopPropagation()
+                  let add = [...arr]
+                  add[i].like = add[i].like + 1
+                  changArr(add) }
+                  }>👍 
+                </span>{ a.like }
+              </h4>
+            <p>{ a.date } 발행</p>
+            <button onClick={(e)=>{
+                e.stopPropagation()
+                let delTitle = [...arr]
+                delTitle.splice(i, 1)
+                changArr(delTitle)
+              }}>
+                삭제</button>
+            </div>
+          )
+        })
       }
+
+      <input onChange={(e) => {
+        text = e.target.value
+        console.log(text)
+        }} />
+      <button onClick={()=> {
+        if (text === '' || text === undefined || text === null) {
+          alert('내용을 입력하세요')
+        } else {
+          let addTitle = [...arr]
+          let copy = {
+            title: text,
+            like: 0,
+            date: getDate(new Date())
+          }
+          addTitle.unshift(copy)
+          changArr(addTitle)
+        }
+      }}>등록</button>
 
       {
         modal === true ? <Modal title = { title } seq = { seq }/> : null
